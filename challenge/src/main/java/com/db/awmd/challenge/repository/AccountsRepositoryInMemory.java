@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 public class AccountsRepositoryInMemory implements AccountsRepository {
 
   private final Map<String, Account> accounts = new ConcurrentHashMap<>();
-  Lock lock = new ReentrantLock();
+  private final Lock lock = new ReentrantLock();
 
   @Override
   public void createAccount(Account account) throws DuplicateAccountIdException {
