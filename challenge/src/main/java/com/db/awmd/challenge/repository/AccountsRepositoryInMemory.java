@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 public class AccountsRepositoryInMemory implements AccountsRepository {
 
   private final Map<String, Account> accounts = new ConcurrentHashMap<>();
+  Lock lock = new ReentrantLock();
 
   @Override
   public void createAccount(Account account) throws DuplicateAccountIdException {
@@ -37,7 +38,6 @@ public class AccountsRepositoryInMemory implements AccountsRepository {
 
   @Override
   public boolean transferAmount(Account transferFrom, Account transferTo, BigDecimal amount) {
-    Lock lock = new ReentrantLock();
     try {
       lock.lock();
       if (transferFrom == null || transferTo == null || amount.compareTo(BigDecimal.ZERO) < 0 || transferFrom.getBalance().compareTo(amount) < 0) {
